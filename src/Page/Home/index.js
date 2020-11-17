@@ -9,6 +9,10 @@ const index = ({navigation}) => {
         onPress={() => navigation.navigate('Anim1')}
         text="Animasi ke 1 kue ulang tahun"
       />
+      <List
+        onPress={() => navigation.navigate('Anim2')}
+        text="Animasi ke 2 jam"
+      />
     </View>
   );
 };

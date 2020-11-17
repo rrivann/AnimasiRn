@@ -22,7 +22,7 @@ const rulerWidth = spacerWidth * 2 + (segmentsLength - 1) * snapSegment;
 const indicatorWidth = 100;
 const indicatorHeight = 100;
 const data = [...Array(segmentsLength).keys()].map((i) => i + minAge);
-console.log('data: ', data);
+// console.log('data: ', data);
 
 const Ruler = () => {
   return (
@@ -80,7 +80,9 @@ const index = () => {
       <Animated.ScrollView
         ref={scrollViewRef}
         horizontal
-        contentContainerStyle={{justifyContent: 'flex-end'}}
+        contentContainerStyle={{
+          justifyContent: 'flex-end',
+        }}
         bounces={false}
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
@@ -89,11 +91,15 @@ const index = () => {
           [
             {
               nativeEvent: {
-                contentOffset: {x: constructor.scrollX},
+                contentOffset: {
+                  x: constructor.scrollX,
+                },
               },
             },
           ],
-          {useNativeDriver: true},
+          {
+            useNativeDriver: true,
+          },
         )}>
         <Ruler />
       </Animated.ScrollView>

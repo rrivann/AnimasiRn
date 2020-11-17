@@ -1,2 +1,4 @@
 import aAnim1 from './Anim1';
-export {aAnim1};
+import aAnim2 from './Anim2';
+
+export {aAnim1, aAnim2};
