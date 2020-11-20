@@ -13,6 +13,10 @@ const index = ({navigation}) => {
         onPress={() => navigation.navigate('Anim2')}
         text="Animasi ke 2 jam"
       />
+      <List
+        onPress={() => navigation.navigate('Anim3')}
+        text="Animasi ke 3 dot invertion"
+      />
     </View>
   );
 };
