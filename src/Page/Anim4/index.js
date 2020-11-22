@@ -12,7 +12,7 @@ const transition = (
   </Transition.Together>
 );
 
-export default index = () => {
+const index = () => {
   const [currentIndex, setCurrentIndex] = React.useState(null);
   const ref = React.useRef();
 
@@ -53,6 +53,8 @@ export default index = () => {
     </Transitioning.View>
   );
 };
+
+export default index;
 
 const styles = StyleSheet.create({
   container: {
