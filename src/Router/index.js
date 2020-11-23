@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Anim1, Anim2, Anim3, Anim4, Anim5, Home} from '../Page';
+import {Anim1, Anim2, Anim3, Anim4, Anim5, Anim6, Home} from '../Page';
 const Stack = createStackNavigator();
 
 const Router = () => {
@@ -34,6 +34,11 @@ const Router = () => {
       <Stack.Screen
         name="Anim5"
         component={Anim5}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Anim6"
+        component={Anim6}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
