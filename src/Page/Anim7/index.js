@@ -15,7 +15,7 @@ const {width, height} = Dimensions.get('window');
 import {getMovies} from './api';
 import Genres from './Genres';
 import Rating from './Rating';
-import {LinearGradient} from 'expo-linear-gradient';
+import LinearGradient from 'react-native-linear-gradient';
 
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;

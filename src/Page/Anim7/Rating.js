@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function Rating({rating}) {
   const filledStars = Math.floor(rating / 2);
