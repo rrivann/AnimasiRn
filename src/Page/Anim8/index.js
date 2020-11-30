@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 const {width} = Dimensions.get('screen');
-import {EvilIcons} from 'react-native-vector-icons/EvilIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {
   FlingGestureHandler,
   Directions,
@@ -71,8 +71,8 @@ const DATA = [
   },
 ];
 
-const OVERFLOW_HEIGHT = 70;
-const SPACING = 10;
+const OVERFLOW_HEIGHT = 80;
+const SPACING = 5;
 const ITEM_WIDTH = width * 0.76;
 const ITEM_HEIGHT = ITEM_WIDTH * 1.7;
 const VISIBLE_ITEMS = 3;
