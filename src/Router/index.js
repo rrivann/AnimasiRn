@@ -9,6 +9,7 @@ import {
   Anim6,
   Anim7,
   Anim8,
+  Anim9,
   Home,
 } from '../Page';
 const Stack = createStackNavigator();
@@ -59,6 +60,11 @@ const Router = () => {
       <Stack.Screen
         name="Anim8"
         component={Anim8}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Anim9"
+        component={Anim9}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
