@@ -43,6 +43,10 @@ const index = ({navigation}) => {
           onPress={() => navigation.navigate('Anim9')}
           text="Animasi ke 9 Flatlist picker"
         />
+        <List
+          onPress={() => navigation.navigate('Anim10')}
+          text="Animasi ke 10 Flatlist picker"
+        />
       </View>
     </ScrollView>
   );
