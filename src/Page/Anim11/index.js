@@ -1,14 +1,128 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Dimensions,
+  FlatList,
+  Animated,
+  Image,
+  findNodeHandle,
+} from 'react-native';
 
-const index = () => {
+const {width, height} = Dimensions.get('screen');
+
+const images = {
+  man:
+    'https://images.pexels.com/photos/3147528/pexels-photo-3147528.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+  women:
+    'https://images.pexels.com/photos/2552130/pexels-photo-2552130.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+  kids:
+    'https://images.pexels.com/photos/5080167/pexels-photo-5080167.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+  skullcandy:
+    'https://images.pexels.com/photos/5602879/pexels-photo-5602879.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+  help:
+    'https://images.pexels.com/photos/2552130/pexels-photo-2552130.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+};
+const data = Object.keys(images).map((i) => ({
+  key: i,
+  title: i,
+  image: images[i],
+}));
+
+const Tab = ({item}) => {
   return (
     <View>
-      <Text></Text>
+      <Text
+        style={{
+          color: 'white',
+          fontSize: 84 / data.length,
+          fontWeight: '800',
+          textTransform: 'uppercase',
+        }}>
+        {item.title}
+      </Text>
     </View>
   );
 };
 
-export default index;
+const Indicator = () => {
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        height: 4,
+        width: 100,
+        backgroundColor: 'white',
+        bottom: -10,
+      }}
+    />
+  );
+};
 
-const styles = StyleSheet.create({});
+const Tabs = ({data, scrollX}) => {
+  return (
+    <View style={{position: 'absolute', top: 100, width}}>
+      <View
+        style={{
+          justifyContent: 'space-evenly',
+          flex: 1,
+          flexDirection: 'row',
+          backgroundColor: 'red',
+        }}>
+        {data.map((item) => {
+          return <Tab key={item.key} item={item} />;
+        })}
+      </View>
+      <Indicator />
+    </View>
+  );
+};
+
+export default function Anim11() {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  return (
+    <View style={styles.container}>
+      <StatusBar hidden />
+      <Animated.FlatList
+        data={data}
+        keyExtractor={(item) => item.key}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
+        )}
+        bounces={false}
+        renderItem={({item}) => {
+          return (
+            <View style={{width, height}}>
+              <Image
+                source={{uri: item.image}}
+                style={{flex: 1, resizeMode: 'cover'}}
+              />
+              <View
+                style={[
+                  StyleSheet.absoluteFillObject,
+                  {backgroundColor: 'rgba(0,0,0,0.3)'},
+                ]}
+              />
+              <Tabs scrollX={scrollX} data={data} />
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

@@ -47,6 +47,10 @@ const index = ({navigation}) => {
           onPress={() => navigation.navigate('Anim10')}
           text="Animasi ke 10 Flatlist picker"
         />
+        <List
+          onPress={() => navigation.navigate('Anim11')}
+          text="Animasi ke 10 Tabs & Animated Indicator using FlatList"
+        />
       </View>
     </ScrollView>
   );
