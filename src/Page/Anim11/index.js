@@ -10,6 +10,7 @@ import {
   Image,
   findNodeHandle,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -29,63 +30,119 @@ const data = Object.keys(images).map((i) => ({
   key: i,
   title: i,
   image: images[i],
+  ref: React.createRef(),
 }));
 
-const Tab = ({item}) => {
+const Tab = React.forwardRef(({item, onItemPress}, ref) => {
   return (
-    <View>
-      <Text
-        style={{
-          color: 'white',
-          fontSize: 84 / data.length,
-          fontWeight: '800',
-          textTransform: 'uppercase',
-        }}>
-        {item.title}
-      </Text>
-    </View>
+    <TouchableOpacity onPress={onItemPress}>
+      <View ref={ref}>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 84 / data.length,
+            fontWeight: '800',
+            textTransform: 'uppercase',
+          }}>
+          {item.title}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
-};
+});
 
-const Indicator = () => {
+const Indicator = ({measures, scrollX}) => {
+  const inputRange = data.map((_, i) => i * width);
+  const indicatorWidth = scrollX.interpolate({
+    inputRange,
+    outputRange: measures.map((measures) => measures.width),
+  });
+  const translateX = scrollX.interpolate({
+    inputRange,
+    outputRange: measures.map((measures) => measures.x),
+  });
   return (
-    <View
+    <Animated.View
       style={{
         position: 'absolute',
         height: 4,
-        width: 100,
+        width: indicatorWidth,
         backgroundColor: 'white',
         bottom: -10,
+        left: 0,
+        transform: [
+          {
+            translateX,
+          },
+        ],
       }}
     />
   );
 };
 
-const Tabs = ({data, scrollX}) => {
+const Tabs = ({data, scrollX, onItemPress}) => {
+  const [measures, setMeasures] = React.useState([]);
+  const containerRef = React.useRef();
+  React.useEffect(() => {
+    let m = [];
+    data.forEach((item) => {
+      item.ref.current.measureLayout(
+        containerRef.current,
+        (x, y, width, height) => {
+          m.push({
+            x,
+            y,
+            width,
+            height,
+          });
+          if (m.length === data.length) {
+            setMeasures(m);
+          }
+        },
+      );
+    });
+  }, []);
+
   return (
     <View style={{position: 'absolute', top: 100, width}}>
       <View
+        ref={containerRef}
         style={{
           justifyContent: 'space-evenly',
           flex: 1,
           flexDirection: 'row',
-          backgroundColor: 'red',
         }}>
-        {data.map((item) => {
-          return <Tab key={item.key} item={item} />;
+        {data.map((item, index) => {
+          return (
+            <Tab
+              key={item.key}
+              item={item}
+              ref={item.ref}
+              onItemPress={() => onItemPress(index)}
+            />
+          );
         })}
       </View>
-      <Indicator />
+      {measures.length > 0 && (
+        <Indicator measures={measures} scrollX={scrollX} />
+      )}
     </View>
   );
 };
 
 export default function Anim11() {
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const ref = React.useRef();
+  const onItemPress = React.useCallback((itemIndex) => {
+    ref?.current?.scrollToOffset({
+      offset: itemIndex * width,
+    });
+  });
   return (
     <View style={styles.container}>
       <StatusBar hidden />
       <Animated.FlatList
+        ref={ref}
         data={data}
         keyExtractor={(item) => item.key}
         horizontal
@@ -109,11 +166,11 @@ export default function Anim11() {
                   {backgroundColor: 'rgba(0,0,0,0.3)'},
                 ]}
               />
-              <Tabs scrollX={scrollX} data={data} />
             </View>
           );
         }}
       />
+      <Tabs scrollX={scrollX} data={data} onItemPress={onItemPress} />
     </View>
   );
 }
