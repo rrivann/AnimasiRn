@@ -49,7 +49,11 @@ const index = ({navigation}) => {
         />
         <List
           onPress={() => navigation.navigate('Anim11')}
-          text="Animasi ke 10 Tabs & Animated Indicator using FlatList"
+          text="Animasi ke 11 Tabs & Animated Indicator using FlatList"
+        />
+        <List
+          onPress={() => navigation.navigate('Anim12')}
+          text="Animasi ke 12 Progress Bar"
         />
       </View>
     </ScrollView>

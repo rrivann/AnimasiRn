@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 const index = ({onPress, text}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.page}>
-      <Text style={{textAlign: 'center'}}>{text}</Text>
+      <Text style={{textAlign: 'center', marginHorizontal: 20}}>{text}</Text>
     </TouchableOpacity>
   );
 };
