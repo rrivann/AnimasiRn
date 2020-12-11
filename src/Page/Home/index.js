@@ -55,6 +55,10 @@ const index = ({navigation}) => {
           onPress={() => navigation.navigate('Anim12')}
           text="Animasi ke 12 Progress Bar"
         />
+        <List
+          onPress={() => navigation.navigate('Anim13')}
+          text="Animasi ke 13 Advanced FlatList Carousel Animation"
+        />
       </View>
     </ScrollView>
   );
