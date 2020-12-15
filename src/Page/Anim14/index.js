@@ -35,16 +35,31 @@ const data = images.map((image, index) => ({
 }));
 
 export default function App() {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-      <FlatList
+      <Animated.FlatList
         data={data}
         keyExtractor={(item) => item.key}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: true},
+        )}
         renderItem={({item, index}) => {
+          const inputRange = [
+            (index - 1) * width,
+            index * width,
+            (index + 1) * width,
+          ];
+          const translateX = scrollX.interpolate({
+            inputRange,
+            outputRange: [-width * 0.7, 0, width * 0.7],
+          });
           return (
             <View
               style={{width, justifyContent: 'center', alignItems: 'center'}}>
@@ -52,8 +67,8 @@ export default function App() {
                 style={{
                   borderRadius: 18,
                   shadowColor: '#000',
-                  shadowOpacity: 1,
-                  shadowRadius: 20,
+                  shadowOpacity: 0.5,
+                  shadowRadius: 30,
                   shadowOffset: {
                     width: 0,
                     height: 0,
@@ -70,12 +85,17 @@ export default function App() {
                     alignItems: 'center',
                     borderRadius: 14,
                   }}>
-                  <Image
+                  <Animated.Image
                     source={{uri: item.photo}}
                     style={{
                       width: ITEM_WIDTH * 1.4,
                       height: ITEM_HEIGHT,
                       resizeMode: 'cover',
+                      transform: [
+                        {
+                          translateX,
+                        },
+                      ],
                     }}
                   />
                 </View>
@@ -90,7 +110,7 @@ export default function App() {
                   borderWidth: 2,
                   borderColor: 'white',
                   position: 'absolute',
-                  bottom: 80,
+                  bottom: 20,
                   right: 60,
                 }}
               />
