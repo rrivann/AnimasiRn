@@ -13,6 +13,7 @@ import Anim11 from './Anim11';
 import Anim12 from './Anim12';
 import Anim13 from './Anim13';
 import Anim14 from './Anim14';
+import Anim15 from './Anim15';
 
 export {
   Home,
@@ -30,4 +31,5 @@ export {
   Anim12,
   Anim13,
   Anim14,
+  Anim15,
 };
