@@ -24,6 +24,7 @@ const ITEM_SIZE = width * 0.38;
 const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
 export default function App() {
+  const scrollx = React.useRef(new Animated.Value(0)).current;
   return (
     <View style={styles.container}>
       <StatusBar hidden />
@@ -48,7 +49,33 @@ export default function App() {
           right: 0,
           flex: 1,
         }}>
-        <Text style={styles.text}>1</Text>
+        <Animated.FlatList
+          data={timers}
+          keyExtractor={(item) => item.toString()}
+          horizontal
+          bounces={false}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollx}}}],
+            {useNativeDriver: true},
+          )}
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={ITEM_SIZE}
+          decelerationRate="fast"
+          style={{flexGrow: 0}}
+          contentContainerStyle={{paddingHorizontal: ITEM_SPACING}}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                style={{
+                  width: ITEM_SIZE,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={[styles.text]}>{item}</Text>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );

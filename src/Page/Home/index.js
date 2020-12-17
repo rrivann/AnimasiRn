@@ -65,7 +65,7 @@ const index = ({navigation}) => {
         />
         <List
           onPress={() => navigation.navigate('Anim15')}
-          text="Animasi ke 15 Parallax Carousel with FlatList"
+          text="Animasi ke 15 Countdown Timer Animation with FlatList and Animated API"
         />
       </View>
     </ScrollView>
