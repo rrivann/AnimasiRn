@@ -12,6 +12,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import {interpolate} from 'react-native-reanimated';
 const {width, height} = Dimensions.get('window');
 const colors = {
   black: '#323F4E',
@@ -24,7 +25,8 @@ const ITEM_SIZE = width * 0.38;
 const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
 export default function App() {
-  const scrollx = React.useRef(new Animated.Value(0)).current;
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const [duration, setDuration] = React.useState(timers[0]);
   return (
     <View style={styles.container}>
       <StatusBar hidden />
@@ -49,30 +51,65 @@ export default function App() {
           right: 0,
           flex: 1,
         }}>
+        <Text style={styles.text}>{duration}</Text>
         <Animated.FlatList
           data={timers}
           keyExtractor={(item) => item.toString()}
           horizontal
           bounces={false}
           onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollx}}}],
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
             {useNativeDriver: true},
           )}
+          onMomentumScrollEnd={(ev) => {
+            const index = Math.round(
+              ev.nativeEvent.contentOffset.x / ITEM_SIZE,
+            );
+            setDuration(timers[index]);
+          }}
           showsHorizontalScrollIndicator={false}
           snapToInterval={ITEM_SIZE}
           decelerationRate="fast"
           style={{flexGrow: 0}}
           contentContainerStyle={{paddingHorizontal: ITEM_SPACING}}
           renderItem={({item, index}) => {
+            const inputRange = [
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+              (index + 1) * ITEM_SIZE,
+            ];
+
+            const opacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.4, 1, 0.4],
+            });
+
+            const scale = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.7, 1, 0.7],
+            });
             return (
-              <View
+              <Animated.View
                 style={{
                   width: ITEM_SIZE,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={[styles.text]}>{item}</Text>
-              </View>
+                <Animated.Text
+                  style={[
+                    styles.text,
+                    {
+                      opacity,
+                      transform: [
+                        {
+                          scale,
+                        },
+                      ],
+                    },
+                  ]}>
+                  {item}
+                </Animated.Text>
+              </Animated.View>
             );
           }}
         />
@@ -94,7 +131,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: ITEM_SIZE * 0.8,
-    fontFamily: 'Menlo',
     color: colors.text,
     fontWeight: '900',
   },
