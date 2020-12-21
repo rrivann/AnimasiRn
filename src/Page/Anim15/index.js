@@ -27,6 +27,74 @@ const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 export default function App() {
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const [duration, setDuration] = React.useState(timers[0]);
+  const inputRef = React.useRef();
+  const timerAnimation = React.useRef(new Animated.Value(height)).current;
+  const textInputAnimation = React.useRef(new Animated.Value(timers[0]))
+    .current;
+  const buttonAnimation = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    const listener = textInputAnimation.addListener(({value}) => {
+      inputRef?.current?.setNativeProps({
+        text: Math.ceil(value).toString(),
+      });
+    });
+
+    return () => {
+      textInputAnimation.removeListener(listener);
+      textInputAnimation.removeAllListeners();
+    };
+  });
+
+  const animation = React.useCallback(() => {
+    textInputAnimation.setValue(duration);
+    Animated.sequence([
+      Animated.timing(buttonAnimation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(timerAnimation, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.parallel([
+        Animated.timing(textInputAnimation, {
+          toValue: 0,
+          duration: duration * 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(timerAnimation, {
+          toValue: height,
+          duration: duration * 1000,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.delay(400),
+    ]).start(() => {
+      Vibration.cancel();
+      Vibration.vibrate();
+      textInputAnimation.setValue(duration);
+      Animated.timing(buttonAnimation, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    });
+  }, [duration]);
+  const opacity = buttonAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
+  const translateY = buttonAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200],
+  });
+  const textOpacity = buttonAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
   return (
     <View style={styles.container}>
       <StatusBar hidden />
@@ -34,12 +102,33 @@ export default function App() {
         style={[
           StyleSheet.absoluteFillObject,
           {
+            height,
+            width,
+            backgroundColor: colors.red,
+            transform: [
+              {
+                translateY: timerAnimation,
+              },
+            ],
+          },
+        ]}
+      />
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
             justifyContent: 'flex-end',
             alignItems: 'center',
             paddingBottom: 100,
+            opacity,
+            transform: [
+              {
+                translateY,
+              },
+            ],
           },
         ]}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={animation}>
           <View style={styles.roundButton} />
         </TouchableOpacity>
       </Animated.View>
@@ -51,7 +140,21 @@ export default function App() {
           right: 0,
           flex: 1,
         }}>
-        <Text style={styles.text}>{duration}</Text>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            width: ITEM_SIZE,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+            opacity: textOpacity,
+          }}>
+          <TextInput
+            style={styles.text}
+            ref={inputRef}
+            defaultValue={duration.toString()}
+          />
+        </Animated.View>
         <Animated.FlatList
           data={timers}
           keyExtractor={(item) => item.toString()}
@@ -70,7 +173,7 @@ export default function App() {
           showsHorizontalScrollIndicator={false}
           snapToInterval={ITEM_SIZE}
           decelerationRate="fast"
-          style={{flexGrow: 0}}
+          style={{flexGrow: 0, opacity}}
           contentContainerStyle={{paddingHorizontal: ITEM_SPACING}}
           renderItem={({item, index}) => {
             const inputRange = [
