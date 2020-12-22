@@ -8,6 +8,7 @@ import {
   Anim13,
   Anim14,
   Anim15,
+  Anim16,
   Anim2,
   Anim3,
   Anim4,
@@ -101,6 +102,11 @@ const Router = () => {
       <Stack.Screen
         name="Anim15"
         component={Anim15}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Anim16"
+        component={Anim16}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

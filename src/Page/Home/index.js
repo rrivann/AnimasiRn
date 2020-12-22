@@ -67,6 +67,10 @@ const index = ({navigation}) => {
           onPress={() => navigation.navigate('Anim15')}
           text="Animasi ke 15 Countdown Timer Animation with FlatList and Animated API"
         />
+        <List
+          onPress={() => navigation.navigate('Anim16')}
+          text="Animasi ke 16"
+        />
       </View>
     </ScrollView>
   );
