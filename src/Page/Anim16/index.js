@@ -34,6 +34,17 @@ export default () => {
   return (
     <View>
       <StatusBar hidden />
+      <FlatList
+        data={images}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({item}) => {
+          return (
+            <View>
+              <Image source={{uri: item}} />
+            </View>
+          );
+        }}
+      />
     </View>
   );
 };
